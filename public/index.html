@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Campus Student Course Registration Dashboard" />
+  <title>Campus Registration | Student Course Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div>
+          <strong>Campus</strong>
+          <span>Registration</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-section="dashboard">
+          <span>⌂</span> Dashboard
+        </button>
+        <button class="nav-item" data-section="registration">
+          <span>＋</span> Registration
+        </button>
+        <button class="nav-item" data-section="students">
+          <span>♙</span> Students
+        </button>
+        <button class="nav-item" data-section="courses">
+          <span>▦</span> Courses
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="api-card">
+          <div class="api-title">
+            <span class="status-dot" id="apiDot"></span>
+            API Status
+          </div>
+          <strong id="apiStatus">Checking...</strong>
+          <small>Node.js + Express + SQLite</small>
+        </div>
+        <div class="sidebar-footer">© 2026 Campus System</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="breadcrumb">
+          <span>Campus</span><b>/</b><strong id="pageTitle">Dashboard</strong>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+          <div class="profile">
+            <div class="avatar">AD</div>
+            <div>
+              <strong>Admin</strong>
+              <small>Administrator</small>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="dashboard" class="page active">
+          <div class="hero">
+            <div>
+              <span class="eyebrow">STUDENT MANAGEMENT</span>
+              <h1>Good morning, Admin <span>👋</span></h1>
+              <p>Manage course registrations and monitor campus enrollment from one place.</p>
+            </div>
+            <button class="primary-btn" data-section="registration">＋ New Registration</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-icon purple">▦</div>
+              <div><span>Total Courses</span><strong id="totalCourses">—</strong><small>Active courses</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon blue">♙</div>
+              <div><span>Registered Students</span><strong id="totalStudents">—</strong><small>Current registrations</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon green">✓</div>
+              <div><span>Available Seats</span><strong id="availableSeats">—</strong><small>Seats remaining</small></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon orange">◉</div>
+              <div><span>Enrollment Rate</span><strong id="enrollmentRate">—</strong><small>Overall capacity</small></div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <div class="panel-heading">
+                <div><h2>Course Availability</h2><p>Live seat availability by course</p></div>
+                <button class="text-btn" data-section="courses">View all →</button>
+              </div>
+              <div id="courseOverview" class="course-overview"></div>
+            </section>
+
+            <section class="panel quick-panel">
+              <div class="panel-heading"><div><h2>Quick Actions</h2><p>Common administrative tasks</p></div></div>
+              <button class="quick-action" data-section="registration"><span>＋</span><div><strong>Register Student</strong><small>Create a new registration</small></div><b>→</b></button>
+              <button class="quick-action" data-section="students"><span>♙</span><div><strong>View Students</strong><small>Browse registered students</small></div><b>→</b></button>
+              <button class="quick-action" data-section="courses"><span>▦</span><div><strong>Browse Courses</strong><small>Check course availability</small></div><b>→</b></button>
+            </section>
+          </div>
+
+          <section class="panel recent-panel">
+            <div class="panel-heading">
+              <div><h2>Recent Registrations</h2><p>Latest students added to the system</p></div>
+              <button class="text-btn" data-section="students">View all →</button>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Student</th><th>Roll Number</th><th>Email</th><th>Course</th><th>Status</th></tr></thead><tbody id="recentStudents"></tbody></table></div>
+          </section>
+        </section>
+
+        <section id="registration" class="page">
+          <div class="section-header">
+            <div><span class="eyebrow">ENROLLMENT</span><h1>New Student Registration</h1><p>Add a student to an available course.</p></div>
+          </div>
+          <div class="form-layout">
+            <section class="panel form-panel">
+              <form id="registrationForm" novalidate>
+                <div class="form-grid">
+                  <label>Full Name <span>*</span><input id="name" name="name" placeholder="e.g. Rahul Sharma" autocomplete="name"><small class="field-error" id="nameError"></small></label>
+                  <label>Roll Number <span>*</span><input id="roll_no" name="roll_no" placeholder="e.g. CSE104"><small class="field-error" id="rollError"></small></label>
+                  <label class="full">Email Address <span>*</span><input id="email" name="email" type="email" placeholder="student@example.com" autocomplete="email"><small class="field-error" id="emailError"></small></label>
+                  <label class="full">Select Course <span>*</span><select id="course_id" name="course_id"><option value="">Choose a course...</option></select><small class="field-error" id="courseError"></small></label>
+                </div>
+                <div id="courseHint" class="course-hint hidden"></div>
+                <div class="form-actions"><button type="reset" class="secondary-btn">Clear</button><button type="submit" class="primary-btn" id="submitBtn">Register Student</button></div>
+              </form>
+            </section>
+            <aside class="panel tips">
+              <div class="tip-icon">✓</div><h2>Registration Checklist</h2>
+              <p>Make sure the information is correct before submitting.</p>
+              <ul><li>Use the student's official name.</li><li>Roll number must be unique.</li><li>Use a valid college email.</li><li>Course must have an available seat.</li></ul>
+              <div class="security-note"><strong>🔒 Secure validation</strong><span>Inputs are validated on both the frontend and backend.</span></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="students" class="page">
+          <div class="section-header"><div><span class="eyebrow">STUDENT DIRECTORY</span><h1>Registered Students</h1><p>Search and review all current registrations.</p></div></div>
+          <section class="panel">
+            <div class="toolbar"><div class="search"><span>⌕</span><input id="studentSearch" placeholder="Search name, roll number or email..."></div><button class="secondary-btn" id="exportBtn">⇩ Export CSV</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Student</th><th>Roll Number</th><th>Email</th><th>Course</th><th>ID</th></tr></thead><tbody id="studentsTable"></tbody></table></div>
+          </section>
+        </section>
+
+        <section id="courses" class="page">
+          <div class="section-header"><div><span class="eyebrow">COURSE CATALOG</span><h1>Available Courses</h1><p>Monitor capacity and enrollment across every course.</p></div></div>
+          <div id="courseCards" class="course-grid"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
